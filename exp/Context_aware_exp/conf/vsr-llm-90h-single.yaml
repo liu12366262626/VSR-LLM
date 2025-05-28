@@ -7,7 +7,7 @@ input:
   visual_decoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_decoder/Qwen2.5-32B-Instruct
   visual_encoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_encoder/conformer/model_avg_cncvs_cnvsrc-single.pth
   # data path
-  label_dir: /home/liuzehua/task/VSR/VSP-LLM/dataset/CNVSRC_Single_icl
+  label_dir: /home/liuzehua/task/VSR/VSP-LLM/dataset
   trainset: train
   validset: valid
   # others

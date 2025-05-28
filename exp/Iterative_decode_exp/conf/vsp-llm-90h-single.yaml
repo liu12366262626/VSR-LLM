@@ -5,7 +5,6 @@ input:
   # model path
   pretrained_model: null
   visual_decoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_decoder/Qwen2.5-7B
-  # visual_decoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_decoder/Llama-2-7b-hf
   visual_encoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_encoder/conformer/model_avg_cncvs_cnvsrc-single.pth
   # data path
   label_dir: /home/liuzehua/task/VSR/VSP-LLM/dataset/CNVSRC_Single

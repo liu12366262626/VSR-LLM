@@ -9,7 +9,7 @@ DEVICE_COUNT=${#ADDR[@]}
 # Generate a save path based on the current date and time
 current_date=$(date +"%Y-%m-%d")
 current_time=$(date +"%H-%M-%S")
-SAVE_PATH=main_log/${current_date}/${current_time}/model-v4
+SAVE_PATH=main_log/${current_date}/${current_time}/Context-aware
 mkdir -p ${SAVE_PATH}
 
 visual_decoder_path=../checkpoint/visual_decoder/    # please download qwen model here(https://huggingface.co/collections/Qwen/qwen25-66e81a666513e518adb90d9e)

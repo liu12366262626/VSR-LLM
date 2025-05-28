@@ -278,7 +278,7 @@ def main(cfg):
     # 您所拥有的GPU列表
 
     available_gpus = [0,1,2,3,4,5]
-    gpu_process_num = [1,1,1,0,0,0]
+    gpu_process_num = [1,0,0,0,0,0]
     split_num = sum(gpu_process_num)
 
             
