@@ -1,0 +1,218 @@
+# @package _group_
+
+
+input:
+  # model path
+  pretrained_model: null
+  visual_decoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_decoder/Qwen2.5-7B
+  # visual_decoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_decoder/Llama-2-7b-hf
+  visual_encoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_encoder/conformer/model_avg_cncvs_cnvsrc-single.pth
+  # data path
+  label_dir: /home/liuzehua/task/VSR/VSP-LLM/dataset/CNVSRC_Single
+  trainset: train
+  validset: valid
+  # others
+  usr_dir: /home/liuzehua/task/VSR/VSP-LLM/exp/model_v7_1
+  gpu_nums: 1
+  icl_data: false
+  train_iter_time: 2
+
+
+
+save:
+  save_path: /home/liuzehua/task/VSR/VSP-LLM/main_log/temp
+  tblog_dir: ${save.save_path}/tblog
+  hydra_dir: ${save.save_path}
+  save_checkpoint: ${save.save_path}/model
+
+
+common:
+  #quantization
+  memory_efficient_fp16: false #如果启用，模型的内存使用将更加节省，适用于内存资源较紧张的环境。
+  fp16_init_scale: 128 #是一个控制半精度浮点数（FP16）训练中初始损失缩放比例（loss scaling）的参数。
+  threshold_loss_scale: null  
+  fp16_scale_tolerance: 0.0
+  fp16_scale_window: null
+  fp16_no_flatten_grads: false
+  fp16: true
+  min_loss_scale: 0.0001 #与 半精度浮点数（FP16）训练中损失缩放（loss scaling）相关的一个参数，用于控制损失缩放的最小值。
+  bf16: false #BFloat16 是一种 16 位浮点数格式，它在保持数值范围与 32 位浮点数（FP32）一致的同时，精度比 FP32 低一些。BF16 与 FP16（半精度浮点数）类似，主要用于加速训练并减少内存使用。
+  memory_efficient_bf16: false
+  amp: false #AMP 的优势是，它自动决定哪些操作可以使用 FP16 来加速，而不需要手动指定精度，因此它提供了性能提升的同时，保持了训练的易用性和稳定性。
+  on_cpu_convert_precision: false #是一个用于控制是否在 CPU 上进行精度转换的配置参数。
+  #log
+  log_file: ${save.save_path}/training_log.txt
+  log_format: tqdm
+  log_interval: 50
+  tensorboard_logdir: ${save.save_path}/tblog
+
+
+  empty_cache_freq: 0 #一个配置参数，通常用于控制在训练过程中 清理 CUDA 缓存的频率。它主要用于在长时间训练时释放不再需要的显存，以减少显存碎片，提高显存的利用率，特别是在使用 GPU 进行训练时。
+  tpu: false
+  cpu: false
+  seed: 1337
+  user_dir: ${input.usr_dir}
+  model_parallel_size: 1
+
+distributed_training:
+  nproc_per_node: ${input.gpu_nums}  # 使用4个GPU（如果服务器有4张卡）
+  distributed_world_size: ${input.gpu_nums}  # 总共使用4个进程（即4个GPU）
+  ddp_backend: no_c10d 
+  distributed_backend: "nccl"  # 通常单机多卡训练使用NCCL作为后端
+  zero_sharding: none
+  cpu_offload: false
+  pipeline_model_parallel: false
+  distributed_init_method: "env://"  # 使用环境变量初始化
+  device_id: 0
+  use_sharded_state: false #保存模型时整个保存还是分片保存
+  fix_batches_to_gpus: false #模型的每一个batch是动态分配显卡还是固定分配
+  distributed_rank: 0
+  fp16: ${common.fp16}
+  memory_efficient_fp16: ${common.memory_efficient_fp16}
+  tpu: ${common.tpu}
+
+
+
+checkpoint:
+  reset_dataloader: false          # 是否在加载检查点后重置数据加载器，false表示继续从中断处加载数据
+  reset_lr_scheduler: false        # 是否在加载检查点后重置学习率调度器，false表示继续使用之前的调度器状态
+  reset_meters: false              # 是否在加载检查点后重置训练和验证的度量器，false表示保留之前的训练指标
+  reset_optimizer: false           # 是否在加载检查点后重置优化器，false表示继续使用之前的优化器状态
+  optimizer_overrides: '{}'        # 用于覆盖优化器配置的选项，默认值为空字典
+  finetune_from_model: null        # 指定用于微调的预训练模型，null表示不进行微调
+  checkpoint_suffix: ''            # 为检查点文件名添加后缀，默认不添加后缀
+  save_dir: ${save.save_checkpoint}
+  save_interval: 1
+  keep_interval_updates: 1
+  save_interval_updates: 1000
+  no_epoch_checkpoints: true
+  best_checkpoint_metric: accuracy
+  maximize_best_checkpoint_metric: true
+  patience: -1
+  no_save: false
+  no_last_checkpoints: false
+  no_save_optimizer_state: false
+  keep_interval_updates_pattern: -1
+  keep_last_epochs: -1
+  keep_best_checkpoints: -1
+  write_checkpoints_asynchronously: false
+  # load chechpoint to continue training
+  restore_file: checkpoint_last.pt #指定用于恢复训练的检查点文件，null表示不从检查点恢复
+  load_checkpoint_on_all_dp_ranks: false
+
+
+
+task:
+  _name: vsp_llm_training
+  image_adaptive_mask: true
+  data: /
+  label_dir: ${input.label_dir}
+  is_s2s: true
+  normalize: true # must be consistent with pre-training
+  labels: ["wrd"]
+  single_target: true
+  fine_tuning: true
+  stack_order_audio: 4
+  max_sample_size: 1000
+  min_sample_size: 0
+  modalities: ["video"]
+  image_aug: true
+  pad_audio: true
+  random_crop: false
+  pretrained_model: ${input.pretrained_model}
+  visual_decoder_path: ${input.visual_decoder_path}
+  icl_data: ${input.icl_data}
+  train_iter_time: ${input.train_iter_time}
+
+dataset:
+  max_tokens: null #设置一个batch里最大的句子不能超过多少token
+  required_batch_size_multiple: 8  # 每个batch必须是多少的倍数
+  data_buffer_size: 10 #控制数据加载时预加载的数据大小，用于提高训练过程中的 I/O 效率
+  num_workers: 0
+  validate_after_updates: 0
+  validate_interval_updates: 0
+  validate_interval: 1
+  train_subset: ${input.trainset}
+  valid_subset: ${input.validset}
+  batch_size: 1
+  disable_validation: false 
+  fixed_validation_seed: null
+  max_valid_steps: null
+  max_tokens_valid: ${dataset.max_tokens}
+  batch_size_valid: ${dataset.batch_size}
+  skip_invalid_size_inputs_valid_test: false
+
+criterion:
+  _name: decoder_only_language_modeling_loss
+  report_accuracy: true
+  label_smoothing: 0.1
+
+optimization:
+  max_epoch: 0 #epoch设置为inf，好像是按照step终止的
+  max_update: 50000
+  lr: [0.0002]
+  sentence_avg: true
+  update_freq: [8] #几个mini-batch一更新梯度
+  use_bmuf: false #是一种用于分布式训练的优化方法，主要用于在多个节点或 GPU 上进行同步更新时加快收敛并提高训练效率。它通过引入动量更新，减少节点之间同步时的波动和延迟。
+  stop_min_lr: -1.0
+  clip_norm: 1.0 #是一个 梯度裁剪的超参数，用于防止梯度爆炸问题（特别是在训练深度神经网络时，梯度可能会在反向传播过程中变得非常大，导致模型不稳定）。
+  stop_time_hours: 0.0
+
+optimizer:
+  _name: adam
+  adam_betas: (0.9,0.98)
+  adam_eps: 1e-08
+
+lr_scheduler:
+  _name: tri_stage
+  warmup_steps: 5000
+  hold_steps: 0
+  decay_steps: 30000
+  final_lr_scale: 0.05
+
+
+model:
+  _name: vsp_llm
+  train_iter_time: ${input.train_iter_time}
+  apply_cluster: false
+  pretrained_model: ${input.pretrained_model}
+  visual_encoder_path: ${input.visual_encoder_path}
+  visual_decoder_path: ${input.visual_decoder_path}
+  apply_mask: false
+  mask_selection: static
+  mask_length: 10
+  mask_other: 0
+  mask_prob: 0.75
+  mask_channel_selection: static
+  mask_channel_length: 64
+  mask_channel_other: 0
+  mask_channel_prob: 0.5
+  layerdrop: 0.1
+  dropout: 0.0
+  activation_dropout: 0.1
+  attention_dropout: 0.0
+  feature_grad_mult: 1.0
+  encoder_embed_dim: 1024
+  decoder_embed_dim: 4096
+  freeze_finetune_updates: 200000
+
+hydra:
+  job:
+    config:
+      override_dirname:
+        kv_sep: "-"
+        item_sep: "__"
+        exclude_keys:
+          - run
+          - task.data
+          - task.label_dir
+          - model.w2v_path
+          - dataset.train_subset
+          - dataset.valid_subset
+          - criterion.wer_kenlm_model
+          - criterion.wer_lexicon
+  run:
+    dir: ${save.hydra_dir}
+  sweep:
+    dir: ???
+    subdir: ${hydra.job.config_name}__${hydra.job.override_dirname}

@@ -1,0 +1,54 @@
+save:
+  infer_result:
+
+common:
+  user_dir: ???
+  #fp16: true
+
+generation:
+  beam: 20
+  lenpen: 0.0
+  max_len_a: 1.0
+  max_len_b: 0
+  lm_weight: 0
+
+
+common_eval:
+  results_path: ???
+  path: ???
+
+dataset:
+  max_tokens: 1000
+  gen_subset: valid
+  num_workers: 0
+
+override:
+  noise_prob: 0.0
+  noise_snr: 0
+  modalities: ['video']
+  visual_decoder_path: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_decoder/Qwen2.5-14B
+  repetition_penalty: 2.0
+  max_length: 200
+  min_length: 1
+
+  
+hydra:
+  job:
+    config:
+      override_dirname:
+        kv_sep: "-"
+        item_sep: "__"
+        exclude_keys:
+          - run
+          - task.data
+          - task.label_dir
+          - model.w2v_path
+          - dataset.train_subset
+          - dataset.valid_subset
+          - criterion.wer_kenlm_model
+          - criterion.wer_lexicon
+  run:
+    dir: ???
+  sweep:
+    dir: ???
+    subdir: ${hydra.job.config_name}__${hydra.job.override_dirname}
