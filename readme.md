@@ -66,7 +66,7 @@ bash train.sh    # Start training
 bash infer.sh    # Run inference
 ```
 
-### 🔧 Step 3: Context-aware decode training and inference
+### 🔧 Step 3: Iterative decode training and inference
 
 ```
 cd exp/Iterative_decode_exp
