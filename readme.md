@@ -46,6 +46,8 @@ checkpoint/
 
 ---
 
+After finishing above process, you can rewrite **train.sh** and **infer.sh** with the right path according to the instruction in these two scripts.
+
 ## 🚀 Running Training and Inference
 
 We provide training and inference scripts for both **Context-aware decoding** and **Iterative decoding** experiments.
