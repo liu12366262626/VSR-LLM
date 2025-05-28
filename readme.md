@@ -35,7 +35,7 @@ After preprocessing, you need to download the following pre-trained models:
 Please place the downloaded models in the following directories:
 
 ```
-checkpoint/
+checkpoints/
 ├── visual_decoder/
 │ └── Qwen2.5-xx/
 ├── visual_encoder/

@@ -20,7 +20,7 @@ import logging
 import math
 import sys
 from typing import Dict, Optional, Any, List, Tuple, Callable
-sys.path.append('/work/liuzehua/task/VSR/VSP-LLM/fairseq/fairseq')
+
 
 # Setup root logger before importing any Fairseq libraries.
 logging.basicConfig(

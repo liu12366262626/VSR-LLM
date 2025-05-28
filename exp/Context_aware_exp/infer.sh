@@ -1,10 +1,10 @@
 #!/bin/bash
 SPLIT=valid
 # Path settings
-ROOT=..
+ROOT=../..
 DATA_PATH=${ROOT}/dataset
 MODEL_SRC=${ROOT}/exp/Context_aware_exp
-VISUAL_DECODER_PATH=${ROOT}/checkpoint/visual_decoder/Qwen2.5-32B-Instruct
+VISUAL_DECODER_PATH=${ROOT}/checkpoints/visual_decoder/Qwen2.5-32B-Instruct
 
 # Trained model checkpoint
 MODEL_PATH=

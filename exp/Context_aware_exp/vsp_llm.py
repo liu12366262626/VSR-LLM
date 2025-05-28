@@ -263,12 +263,12 @@ class Encoders:
     # conformer train on cncvs + single
     def load_conformer(self):
         import sys
-        sys.path.append('/home/liuzehua/task/VSR/VSP-LLM/checkpoints')
+        sys.path.append('../../checkpoints')
         from visual_encoder.conformer.conformer import VSR_frontend
         """Build a new model instance."""
         import yaml
         # 打开并读取 YAML 文件
-        with open('/home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_encoder/conformer/conformer.yaml', 'r', encoding='utf-8') as file:
+        with open('../../checkpoints/visual_encoder/conformer/conformer.yaml', 'r', encoding='utf-8') as file:
             vsr_frontend_cfg = yaml.safe_load(file)
         checkpoint_path = self.visual_encoder_path
         ckpt = torch.load(
