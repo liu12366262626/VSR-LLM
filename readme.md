@@ -34,15 +34,16 @@ After preprocessing, you need to download the following pre-trained models:
 
 Please place the downloaded models in the following directories:
 
-<pre> <code>```text checkpoint/ ├── visual_decoder/ │ └── Qwen2.5-xx/ ├── visual_encoder/ │ ├── conformer.py │ ├── conformer.yaml │ └── model_avg_cncvs_cnvsrc-single.pth ```</code> </pre>
-<!-- checkpoint/
+
+```
+checkpoint/
 ├── visual_decoder/
 │ └── Qwen2.5-xx/
 ├── visual_encoder/
 │ └── conformer.py
 │ └── conformer.yaml
-│ └── model_avg_cncvs_cnvsrc-single.pth -->
-
+│ └── model_avg_cncvs_cnvsrc-single.pth
+```
 
 ---
 
