@@ -58,7 +58,7 @@ We provide training and inference scripts for both **Context-aware decoding** an
 conda env create -f vsr_llm_env.yaml
 conda activate vsr_llm
 ```
-### Step 2: Context-aware decode training and inference
+### 🔧 Step 2: Context-aware decode training and inference
 
 ```
 cd exp/Context_aware_exp
@@ -66,7 +66,7 @@ bash train.sh    # Start training
 bash infer.sh    # Run inference
 ```
 
-### Step 3: Context-aware decode training and inference
+### 🔧 Step 3: Context-aware decode training and inference
 
 ```
 cd exp/Context_aware_exp
