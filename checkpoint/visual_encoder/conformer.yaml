@@ -1,0 +1,28 @@
+visual_backbone:
+  adim: 768
+  aheads: 12
+  eunits: 3072
+  elayers: 12
+  transformer_input_layer: conv3d
+  dropout_rate: 0.1
+  transformer_attn_dropout_rate: 0.1
+  transformer_encoder_attn_layer_type: rel_mha
+  macaron_style: true
+  use_cnn_module: true
+  cnn_module_kernel: 31
+  zero_triu: false
+  a_upsample_ratio: 1
+  relu_type: swish
+  ddim: ${model.visual_backbone.adim}
+  dheads: ${model.visual_backbone.aheads}
+  dunits: 3072
+  dlayers: 6
+  lsm_weight: 0.1
+  transformer_length_normalized_loss: false
+  mtlalpha: 0.1
+  ctc_type: builtin
+  rel_pos_type: latest
+  py_ctc_weight: 0.5
+checkpoint: /home/liuzehua/task/VSR/VSP-LLM/checkpoints/visual_encoder/conformer/model_avg_cncvs_cnvsrc-single.pth
+
+
