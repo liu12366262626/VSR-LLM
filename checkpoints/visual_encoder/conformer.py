@@ -1,5 +1,4 @@
-import sys
-sys.path.append('/home/liuzehua/task/VSR/akvsr_plus')
+
 import torch
 from espnet.nets.pytorch_backend.transformer.add_sos_eos import add_sos_eos
 from espnet.nets.pytorch_backend.nets_utils import (
@@ -17,7 +16,7 @@ from espnet.nets.pytorch_backend.backbones.conv3d_extractor import Conv3dResNet
 from espnet.nets.pytorch_backend.nets_utils import rename_state_dict
 
 # from espnet.nets.pytorch_backend.transducer.vgg import VGG2L
-from vsr2asr.model4.Phase3_vsr2asr_v2.attention import (
+from attention import (
     RelPositionMultiHeadedAttention,  # noqa: H301
     CrossMultiHeadedAttention,
     RelPositionCrossMultiHeadedAttention
